@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -20,6 +21,7 @@ namespace StockportGovUK.AspNetCore.Availability.Managers
         Task<bool> IsFeatureEnabled(string featureName);
         Task<bool> IsOperationEnabled(string operationName);
         AvailabilityConfiguration AvailabilityConfiguration { get; }
+        List<string> LocalCacheProvider { get; set; }
     }
 
     public class AvailabilityManager : IAvailabilityManager
@@ -28,6 +30,8 @@ namespace StockportGovUK.AspNetCore.Availability.Managers
         private readonly string _appName;
         private readonly Guid _registrationId;
         public AvailabilityConfiguration AvailabilityConfiguration { get; private set; }
+        public List<string> LocalCacheProvider { get; set; }
+        public AvailabilityOptions AvailabilityOptions { get; set; }
 
         public AvailabilityManager(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
@@ -35,6 +39,12 @@ namespace StockportGovUK.AspNetCore.Availability.Managers
             _appName = Assembly.GetEntryAssembly().GetName().Name;
             AvailabilityConfiguration = GetConfiguration(configuration);
             _registrationId = RegisterApplication().Result;
+        }
+
+        public AvailabilityManager(IHttpClientFactory httpClientFactory, IConfiguration configuration, AvailabilityOptions availabilityOptions)
+            : this(httpClientFactory, configuration)
+        {
+            AvailabilityOptions = availabilityOptions;
         }
 
         public async Task<bool> IsApplicationEnabled()
@@ -108,6 +118,15 @@ namespace StockportGovUK.AspNetCore.Availability.Managers
             availabilityConfiguration.WhitelistedRoutes.Add(availabilityConfiguration.ErrorRoute);
 
             return availabilityConfiguration;
+        }
+    }
+
+    public class AvailabilityOptions
+    {
+        public List<string> CacheProviders { get; set; }
+
+        public AvailabilityOptions (){
+            CacheProviders = new List<string>();
         }
     }
 }

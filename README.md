@@ -23,11 +23,12 @@ To allow easy access to and use of Stockport's availability & feature toggling s
 
 ## Initilaization
 
-Add configuration
+Availability cofiguration should be added to appSettings as per below. Note that Key should be kept secret.
 
 ```json
   "Availability": {
     "BaseUrl": "http://scnavaildev.stockport.gov.uk/api/v1",
+    "Key": "<AccessKeyHere>",
     "ErrorRoute": "/error/500",
     "WhitelistedRoutes": [
       "/swagger/index.html"
@@ -36,12 +37,7 @@ Add configuration
     "AllowSwagger": true
   }
 ```
-Access Key stored as a Secret
-```json
-  "Availability": {
-    "Key": "<AccessKeyHere>"
-  }
-```
+
 Initialise in Startup 
 
 ```c#
