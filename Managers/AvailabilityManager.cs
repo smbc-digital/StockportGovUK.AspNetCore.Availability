@@ -21,7 +21,6 @@ namespace StockportGovUK.AspNetCore.Availability.Managers
         Task<bool> IsFeatureEnabled(string featureName);
         Task<bool> IsOperationEnabled(string operationName);
         AvailabilityConfiguration AvailabilityConfiguration { get; }
-        List<string> LocalCacheProvider { get; set; }
     }
 
     public class AvailabilityManager : IAvailabilityManager
@@ -30,7 +29,6 @@ namespace StockportGovUK.AspNetCore.Availability.Managers
         private readonly string _appName;
         private readonly Guid _registrationId;
         public AvailabilityConfiguration AvailabilityConfiguration { get; private set; }
-        public List<string> LocalCacheProvider { get; set; }
         public AvailabilityOptions AvailabilityOptions { get; set; }
 
         public AvailabilityManager(IHttpClientFactory httpClientFactory, IConfiguration configuration)

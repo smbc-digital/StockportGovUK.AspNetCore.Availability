@@ -32,7 +32,10 @@ namespace StockportGovUK.AspNetCore.Availability
 
         public static IAvailabilityBuilder WithRedisCache(this IAvailabilityBuilder builder)
         {
-            if (builder == null) throw new ArgumentException(nameof(builder));
+            if (builder == null) 
+            {
+                throw new ArgumentException(nameof(builder));
+            }
 
             builder.Services.Configure<AvailabilityOptions>(options => options.CacheProviders.Add("Redis"));
             return builder;
@@ -40,7 +43,10 @@ namespace StockportGovUK.AspNetCore.Availability
 
         public static IAvailabilityBuilder WithSessionCache(this IAvailabilityBuilder builder)
         {
-            if (builder == null) throw new ArgumentException(nameof(builder));
+            if (builder == null) 
+            {
+                throw new ArgumentException(nameof(builder));
+            }
 
             builder.Services.Configure<AvailabilityOptions>(options => options.CacheProviders.Add("Session"));
             return builder;
