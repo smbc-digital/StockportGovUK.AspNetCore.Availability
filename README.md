@@ -23,7 +23,7 @@ To allow easy access to and use of Stockport's availability & feature toggling s
 
 ## Initilaization
 
-Availability cofiguration should be added to appSettings as per below. Note that Key should be kept secret.
+Availability cofiguration should be added to appSettings as below. Note that Key should be kept secret.
 
 ```json
   "Availability": {
@@ -38,10 +38,61 @@ Availability cofiguration should be added to appSettings as per below. Note that
   }
 ```
 
-Initialise in Startup 
+Initialise and register for use by the DI container in ConfigureServices in Startup.cs
 
 ```c#
-services.AddAvailability();
+        public void ConfigureServices(IServiceCollection services)
+        {
+            ...
+            services.AddAvailability();
+        }
+```
+
+## Usage
+
+### Middleware
+Availability can check whether your entire app is toggled on/off in middleware during the prcessing of every request. Register the availability middleware in Configure in Startup.cs
+
+```c#
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+          ...
+          app.UseMiddleware<Availability>();
+          ...
+        }
+
+```
+### Attributes
+Attributes can be used at controller and action level using 
+
+
+```c#
+[FeatureToggle("ToggleNameHere")]
+or
+[OperationalToggle("ToggleNameHere")]
+public IActionResult MyAction()
+...
+```
+
+### Best Practices
+If feature toggles are going to be used in multiple places it is advised they are made available as constants.
+
+```c#
+namespace yournamespace
+{
+    public static class FeatureToggles
+    {
+        public const string MyToggle = "MyToggleName";
+    }
+}
+```
+
+Then referenced as below
+
+```c#
+[FeatureToggle(FeatureToggles.MyToggle)]
+public IActionResult MyAction()
+...
 ```
 
 ## License
