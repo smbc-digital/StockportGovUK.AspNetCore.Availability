@@ -4,7 +4,7 @@
     <PackageId>StockportGovUK.AspNetCore.Availability</PackageId>
     <Title>A package that simplified access to Stockport Availability/Feature toggling services</Title>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionPrefix>0.2.0</VersionPrefix>
     <Authors>Colin Lees, Jon Chiles, Jon Hadley</Authors>
     <Company>Stockport Council</Company>
   </PropertyGroup>
