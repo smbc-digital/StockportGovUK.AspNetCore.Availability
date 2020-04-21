@@ -54,12 +54,12 @@ Initialise and register for use by the DI container in ConfigureServices in Star
 Availability can check whether your entire app is toggled on/off in middleware during the prcessing of every request. Register the availability middleware in Configure in Startup.cs
 
 ```c#
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-          ...
-          app.UseMiddleware<Availability>();
-          ...
-        }
+public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+{
+  ...
+  app.UseMiddleware<Availability>();
+  ...
+}
 
 ```
 ### Attributes

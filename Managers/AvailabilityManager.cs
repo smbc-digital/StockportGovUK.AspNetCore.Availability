@@ -6,10 +6,10 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using StockportGovUK.AspNetCore.Availability.Models;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 
 namespace StockportGovUK.AspNetCore.Availability.Managers
 {
@@ -66,21 +66,21 @@ namespace StockportGovUK.AspNetCore.Availability.Managers
         public async Task RegisterFeature(string featureName)
 
         {
-            var payload = JsonConvert.SerializeObject(new {name = featureName, enabled = true });
+            var payload = JsonSerializer.Serialize(new {name = featureName, enabled = true });
             var content = new StringContent(payload, Encoding.UTF8, "application/json");
             await PostAsync($"{AvailabilityConfiguration.BaseUrl}/apps/{_registrationId}/features", content);
         }
 
         public async Task RegisterOperation(string operationName)
         {
-            var payload = JsonConvert.SerializeObject(new {name = operationName, enabled = true });
+            var payload = JsonSerializer.Serialize(new {name = operationName, enabled = true });
             var content = new StringContent(payload, Encoding.UTF8, "application/json");
             await PostAsync($"{AvailabilityConfiguration.BaseUrl}/apps/{_registrationId}/operations", content);
         }
 
         private async Task<Guid> RegisterApplication()
         {           
-            var payload = JsonConvert.SerializeObject(new {name = _appName, environment = AvailabilityConfiguration.Environment, enabled = true });
+            var payload = JsonSerializer.Serialize(new {name = _appName, environment = AvailabilityConfiguration.Environment, enabled = true });
             var content = new StringContent(payload, Encoding.UTF8, "application/json");
             var response = await PostAsync($"{AvailabilityConfiguration.BaseUrl}/apps", content);
             var appGuid = response.Headers.Location.Segments.Last();
