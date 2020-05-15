@@ -34,7 +34,8 @@ Availability cofiguration should be added to appSettings as below. Note that Key
       "/swagger/index.html"
     ],
     "Environment": "int",
-    "AllowSwagger": true
+    "AllowSwagger": true,
+    "Enabled": true
   }
 ```
 
