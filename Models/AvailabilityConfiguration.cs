@@ -11,6 +11,7 @@ namespace StockportGovUK.AspNetCore.Availability.Models
         public bool AllowSwagger { get; set; }
         public string Environment { get; set; }
         public string Key { get; set; }
+        public bool Enabled { get; set; } = true;
 
         public string GetErrorUrl(HttpContext httpContext)
         {
