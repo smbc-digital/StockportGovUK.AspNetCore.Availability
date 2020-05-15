@@ -1,6 +1,9 @@
+using System;
+using System.Net;
 using System.Threading.Tasks;
 using StockportGovUK.AspNetCore.Availability.Managers;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace StockportGovUK.AspNetCore.Availability.Middleware
 {
@@ -20,12 +23,6 @@ namespace StockportGovUK.AspNetCore.Availability.Middleware
             if (context.Request != null)
             {
                 var availabilityConfiguration = _availabilityManager.AvailabilityConfiguration;
-
-                if (!availabilityConfiguration.Enabled)
-                {
-                    await _next.Invoke(context);
-                }
-
                 var appEnabled = await _availabilityManager.IsApplicationEnabled();
 
                 if (!appEnabled && !availabilityConfiguration.IsAccessibleAddress(context.Request))

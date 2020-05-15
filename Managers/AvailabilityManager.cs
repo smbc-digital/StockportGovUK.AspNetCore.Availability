@@ -36,11 +36,7 @@ namespace StockportGovUK.AspNetCore.Availability.Managers
             _httpClientFactory = httpClientFactory;
             _appName = Assembly.GetEntryAssembly().GetName().Name;
             AvailabilityConfiguration = GetConfiguration(configuration);
-
-            if (AvailabilityConfiguration.Enabled)
-            {
-                _registrationId = RegisterApplication().Result;
-            }
+            _registrationId = RegisterApplication().Result;
         }
 
         public AvailabilityManager(IHttpClientFactory httpClientFactory, IConfiguration configuration, AvailabilityOptions availabilityOptions)
@@ -51,59 +47,39 @@ namespace StockportGovUK.AspNetCore.Availability.Managers
 
         public async Task<bool> IsApplicationEnabled()
         {
-            if (!AvailabilityConfiguration.Enabled)
-            {
-                return true;
-            }
-
             var result = await GetAsync($"{AvailabilityConfiguration.BaseUrl}/apps/{_registrationId}");
             return result.StatusCode == HttpStatusCode.OK;
         }
 
         public async Task<bool> IsFeatureEnabled(string featureName)
         {
-            if (!AvailabilityConfiguration.Enabled)
-            {
-                return true;
-            }
-
             var result = await GetAsync($"{AvailabilityConfiguration.BaseUrl}/apps/{_registrationId}/features/name/{featureName}");
             return result.StatusCode == HttpStatusCode.OK;
         }
         
         public async Task<bool> IsOperationEnabled(string operationName)
         {
-            if (!AvailabilityConfiguration.Enabled)
-            {
-                return true;
-            }
-
             var result = await GetAsync($"{AvailabilityConfiguration.BaseUrl}/apps/{_registrationId}/operations/name/{operationName}");
             return result.StatusCode == HttpStatusCode.OK;
         }
         
         public async Task RegisterFeature(string featureName)
+
         {
-            if (AvailabilityConfiguration.Enabled)
-            {
-                var payload = JsonSerializer.Serialize(new {name = featureName, enabled = true });
-                var content = new StringContent(payload, Encoding.UTF8, "application/json");
-                await PostAsync($"{AvailabilityConfiguration.BaseUrl}/apps/{_registrationId}/features", content);
-            }
+            var payload = JsonSerializer.Serialize(new {name = featureName, enabled = true });
+            var content = new StringContent(payload, Encoding.UTF8, "application/json");
+            await PostAsync($"{AvailabilityConfiguration.BaseUrl}/apps/{_registrationId}/features", content);
         }
 
         public async Task RegisterOperation(string operationName)
         {
-            if (AvailabilityConfiguration.Enabled)
-            {
-                var payload = JsonSerializer.Serialize(new {name = operationName, enabled = true });
-                var content = new StringContent(payload, Encoding.UTF8, "application/json");
-                await PostAsync($"{AvailabilityConfiguration.BaseUrl}/apps/{_registrationId}/operations", content);
-            }
+            var payload = JsonSerializer.Serialize(new {name = operationName, enabled = true });
+            var content = new StringContent(payload, Encoding.UTF8, "application/json");
+            await PostAsync($"{AvailabilityConfiguration.BaseUrl}/apps/{_registrationId}/operations", content);
         }
 
         private async Task<Guid> RegisterApplication()
-        {
+        {           
             var payload = JsonSerializer.Serialize(new {name = _appName, environment = AvailabilityConfiguration.Environment, enabled = true });
             var content = new StringContent(payload, Encoding.UTF8, "application/json");
             var response = await PostAsync($"{AvailabilityConfiguration.BaseUrl}/apps", content);
@@ -114,11 +90,6 @@ namespace StockportGovUK.AspNetCore.Availability.Managers
 
         private async Task<HttpResponseMessage> PostAsync(string url, StringContent content)
         {
-            if (!AvailabilityConfiguration.Enabled)
-            {
-                return null;
-            }
-
             var client = _httpClientFactory.CreateClient();
             client.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse(AvailabilityConfiguration.Key);
             return await client.PostAsync(url, content);
@@ -126,11 +97,6 @@ namespace StockportGovUK.AspNetCore.Availability.Managers
 
         public async Task<HttpResponseMessage> GetAsync(string url)
         {
-            if (!AvailabilityConfiguration.Enabled)
-            {
-                return null;
-            }
-
             var client = _httpClientFactory.CreateClient();
             client.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse(AvailabilityConfiguration.Key);
             return await client.GetAsync(url);
